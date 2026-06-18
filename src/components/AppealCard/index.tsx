@@ -1,0 +1,92 @@
+import React, { useState } from 'react';
+import { View, Text, Image } from '@tarojs/components';
+import classnames from 'classnames';
+import styles from './index.module.scss';
+import type { Appeal, AppealStatus } from '@/types';
+
+interface AppealCardProps {
+  appeal: Appeal;
+  onClick?: () => void;
+}
+
+const statusMap: Record<AppealStatus, { label: string; className: string }> = {
+  pending: { label: '待审核', className: styles.statusPending },
+  processing: { label: '处理中', className: styles.statusProcessing },
+  resolved: { label: '已解决', className: styles.statusResolved },
+  rejected: { label: '已驳回', className: styles.statusRejected },
+};
+
+const AppealCard: React.FC<AppealCardProps> = ({ appeal, onClick }) => {
+  const [expanded, setExpanded] = useState(false);
+  const statusInfo = statusMap[appeal.status];
+
+  const toggleExpand = (e) => {
+    e.stopPropagation();
+    setExpanded(!expanded);
+  };
+
+  return (
+    <View className={styles.card} onClick={onClick}>
+      <View className={styles.header}>
+        <View className={styles.headerLeft}>
+          <View className={classnames(styles.statusTag, statusInfo.className)}>
+            {statusInfo.label}
+          </View>
+          <Text className={styles.time}>{appeal.createdAt}</Text>
+        </View>
+        <View className={styles.expandBtn} onClick={toggleExpand}>
+          <Text className={styles.expandText}>{expanded ? '收起' : '展开'}</Text>
+          <Text className={classnames(styles.expandIcon, expanded && styles.expandIconRotated)}>
+            ▼
+          </Text>
+        </View>
+      </View>
+
+      <View className={styles.reviewContent}>
+        <Text className={styles.reviewLabel}>原评价内容：</Text>
+        <Text className={styles.reviewText}>{appeal.reviewContent}</Text>
+      </View>
+
+      <View className={styles.appealContent}>
+        <Text className={styles.appealLabel}>申诉说明：</Text>
+        <Text className={styles.appealText}>{appeal.description}</Text>
+      </View>
+
+      {appeal.evidenceImages.length > 0 && (
+        <View className={styles.evidenceSection}>
+          <Text className={styles.evidenceLabel}>凭证照片：</Text>
+          <View className={styles.evidenceImages}>
+            {appeal.evidenceImages.map((img, index) => (
+              <Image
+                key={index}
+                src={img}
+                className={styles.evidenceImage}
+                mode="aspectFill"
+              />
+            ))}
+          </View>
+        </View>
+      )}
+
+      {expanded && appeal.processor && (
+        <View className={styles.processSection}>
+          <View className={styles.processDivider} />
+          <View className={styles.processInfo}>
+            <Text className={styles.processLabel}>处理人：{appeal.processor}</Text>
+            {appeal.processedAt && (
+              <Text className={styles.processTime}>处理时间：{appeal.processedAt}</Text>
+            )}
+          </View>
+          {appeal.processorComment && (
+            <View className={styles.processComment}>
+              <Text className={styles.commentLabel}>处理意见：</Text>
+              <Text className={styles.commentText}>{appeal.processorComment}</Text>
+            </View>
+          )}
+        </View>
+      )}
+    </View>
+  );
+};
+
+export default AppealCard;

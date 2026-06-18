@@ -1,0 +1,215 @@
+@use '@/styles/variables.scss' as *;
+
+.card {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+  transition: all $transition-base;
+  border-left: 6rpx solid transparent;
+
+  &:active {
+    transform: scale(0.98);
+    box-shadow: $shadow-card-hover;
+  }
+}
+
+.cardUrgent {
+  border-left-color: $color-error;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  flex-wrap: wrap;
+}
+
+.statusTag,
+.urgentTag,
+.categoryTag {
+  padding: $spacing-xs $spacing-md;
+  border-radius: $radius-xs;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+}
+
+.statusPending {
+  background: $color-status-pending;
+  color: $color-status-pending-text;
+}
+
+.statusConfirmed {
+  background: $color-status-processing;
+  color: $color-status-processing-text;
+}
+
+.statusCompleted {
+  background: $color-status-resolved;
+  color: $color-status-resolved-text;
+}
+
+.urgentTag {
+  background: $color-error;
+  color: $color-text-white;
+}
+
+.categoryTag {
+  background: $color-bg-page;
+  color: $color-text-secondary;
+}
+
+.expandBtn {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+}
+
+.expandText {
+  font-size: $font-size-sm;
+  color: $color-primary;
+}
+
+.expandIcon {
+  font-size: $font-size-xs;
+  color: $color-primary;
+  transition: transform $transition-fast;
+}
+
+.expandIconRotated {
+  transform: rotate(180deg);
+}
+
+.title {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  display: block;
+  margin-bottom: $spacing-sm;
+}
+
+.description {
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+  line-height: $line-height-loose;
+  margin-bottom: $spacing-lg;
+  display: block;
+}
+
+.metaRow {
+  display: flex;
+  gap: $spacing-xl;
+  margin-bottom: $spacing-md;
+}
+
+.metaItem {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+}
+
+.metaLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.metaValue {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+}
+
+.deadlineRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-md;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+}
+
+.deadlineLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.deadlineValue {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+}
+
+.deadlineUrgent {
+  color: $color-error;
+  font-weight: $font-weight-semibold;
+}
+
+.detailSection {
+  margin-top: $spacing-lg;
+}
+
+.divider {
+  height: 1rpx;
+  background: $color-divider;
+  margin-bottom: $spacing-lg;
+}
+
+.detailTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  display: block;
+  margin-bottom: $spacing-sm;
+}
+
+.detailText {
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+  line-height: $line-height-loose;
+  display: block;
+}
+
+.confirmInfo {
+  margin-top: $spacing-md;
+  padding-top: $spacing-md;
+  border-top: 1rpx dashed $color-border;
+}
+
+.confirmLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.actionRow {
+  margin-top: $spacing-lg;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.confirmBtn {
+  @include button-reset;
+  height: $button-height-md;
+  padding: 0 $spacing-xl;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-button;
+  transition: all $transition-fast;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+  }
+}
+
+.confirmBtnText {
+  font-size: $font-size-md;
+  color: $color-text-white;
+  font-weight: $font-weight-medium;
+}

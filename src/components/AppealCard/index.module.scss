@@ -1,0 +1,172 @@
+@use '@/styles/variables.scss' as *;
+
+.card {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.98);
+    box-shadow: $shadow-card-hover;
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+}
+
+.statusTag {
+  padding: $spacing-xs $spacing-md;
+  border-radius: $radius-xs;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+}
+
+.statusPending {
+  background: $color-status-pending;
+  color: $color-status-pending-text;
+}
+
+.statusProcessing {
+  background: $color-status-processing;
+  color: $color-status-processing-text;
+}
+
+.statusResolved {
+  background: $color-status-resolved;
+  color: $color-status-resolved-text;
+}
+
+.statusRejected {
+  background: $color-status-rejected;
+  color: $color-status-rejected-text;
+}
+
+.time {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.expandBtn {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+}
+
+.expandText {
+  font-size: $font-size-sm;
+  color: $color-primary;
+}
+
+.expandIcon {
+  font-size: $font-size-xs;
+  color: $color-primary;
+  transition: transform $transition-fast;
+}
+
+.expandIconRotated {
+  transform: rotate(180deg);
+}
+
+.reviewContent,
+.appealContent {
+  margin-bottom: $spacing-md;
+}
+
+.reviewLabel,
+.appealLabel,
+.evidenceLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  display: block;
+  margin-bottom: $spacing-xs;
+}
+
+.reviewText {
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+  line-height: $line-height-loose;
+  background: $color-bg-page;
+  padding: $spacing-md;
+  border-radius: $radius-md;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.appealText {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  line-height: $line-height-loose;
+}
+
+.evidenceSection {
+  margin-bottom: $spacing-md;
+}
+
+.evidenceImages {
+  display: flex;
+  gap: $spacing-sm;
+  flex-wrap: wrap;
+}
+
+.evidenceImage {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: $radius-md;
+  background: $color-bg-page;
+}
+
+.processSection {
+  margin-top: $spacing-md;
+}
+
+.processDivider {
+  height: 1rpx;
+  background: $color-divider;
+  margin-bottom: $spacing-md;
+}
+
+.processInfo {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: $spacing-sm;
+}
+
+.processLabel,
+.processTime {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.processComment {
+  background: $color-bg-page;
+  padding: $spacing-md;
+  border-radius: $radius-md;
+}
+
+.commentLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  display: block;
+  margin-bottom: $spacing-xs;
+}
+
+.commentText {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  line-height: $line-height-loose;
+}
