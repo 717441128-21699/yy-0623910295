@@ -14,6 +14,7 @@ import {
   getKeywordLabel,
   getCategoryLabel,
 } from '@/data/mock';
+import { useAppStore } from '@/store/useAppStore';
 
 type FilterType = 'source' | 'emotion' | 'keyword';
 
@@ -23,6 +24,15 @@ const HomePage: React.FC = () => {
   const [keywordFilter, setKeywordFilter] = useState<string>('all');
   const [activeFilterType, setActiveFilterType] = useState<FilterType>('source');
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const { appeals, rectifications } = useAppStore();
+
+  const pendingAppealsCount = useMemo(() => {
+    return appeals.filter((a) => a.status === 'pending').length;
+  }, [appeals]);
+
+  const pendingRectificationsCount = useMemo(() => {
+    return rectifications.filter((r) => r.status === 'pending').length;
+  }, [rectifications]);
 
   useDidShow(() => {
     console.log('[HomePage] 页面显示');
@@ -177,14 +187,14 @@ const HomePage: React.FC = () => {
           <View className={styles.alertItem}>
             <View className={styles.alertIcon}>!</View>
             <View className={styles.alertContent}>
-              <Text className={styles.alertCount}>{mockStoreOverview.pendingAppeals}</Text>
+              <Text className={styles.alertCount}>{pendingAppealsCount}</Text>
               <Text className={styles.alertLabel}>待处理申诉</Text>
             </View>
           </View>
           <View className={styles.alertItem}>
             <View className={styles.alertIcon} style={{ background: '#f53f3f' }}>!</View>
             <View className={styles.alertContent}>
-              <Text className={styles.alertCount}>{mockStoreOverview.pendingRectifications}</Text>
+              <Text className={styles.alertCount}>{pendingRectificationsCount}</Text>
               <Text className={styles.alertLabel}>待整改提醒</Text>
             </View>
           </View>

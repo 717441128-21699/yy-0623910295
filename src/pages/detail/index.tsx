@@ -4,7 +4,8 @@ import Taro, { useRouter, useDidShow } from '@tarojs/taro';
 import classnames from 'classnames';
 import styles from './index.module.scss';
 import type { Review, EmotionType, AppealStatus } from '@/types';
-import { mockReviews, mockAppeals, getKeywordLabel } from '@/data/mock';
+import { mockReviews, getKeywordLabel } from '@/data/mock';
+import { useAppStore } from '@/store/useAppStore';
 
 const emotionMap: Record<EmotionType, { label: string; className: string }> = {
   positive: { label: '正面', className: styles.emotionPositive },
@@ -14,14 +15,15 @@ const emotionMap: Record<EmotionType, { label: string; className: string }> = {
 
 const statusMap: Record<AppealStatus, { label: string; className: string }> = {
   pending: { label: '待审核', className: styles.statusPending },
-  processing: { label: '处理中', className: styles.statusProcessing },
+  processing: { label: '待沟通', className: styles.statusProcessing },
   resolved: { label: '已解决', className: styles.statusResolved },
-  rejected: { label: '已驳回', className: styles.statusRejected },
+  rejected: { label: '无需处理', className: styles.statusRejected },
 };
 
 const DetailPage: React.FC = () => {
   const router = useRouter();
   const reviewId = router.params.id || 'r001';
+  const { appeals } = useAppStore();
 
   const review = useMemo<Review | undefined>(() => {
     return mockReviews.find((r) => r.id === reviewId);
@@ -29,8 +31,8 @@ const DetailPage: React.FC = () => {
 
   const appeal = useMemo(() => {
     if (!review?.hasAppealed) return null;
-    return mockAppeals.find((a) => a.id === review.appealId);
-  }, [review]);
+    return appeals.find((a) => a.id === review.appealId) || appeals.find((a) => a.reviewId === reviewId);
+  }, [review, appeals]);
 
   useDidShow(() => {
     console.log('[DetailPage] 页面显示，评价ID:', reviewId);

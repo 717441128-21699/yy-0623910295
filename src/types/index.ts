@@ -4,6 +4,19 @@ export type AppealStatus = 'pending' | 'processing' | 'resolved' | 'rejected';
 
 export type RectificationStatus = 'pending' | 'confirmed' | 'completed';
 
+export const appealStatusMap: Record<AppealStatus, string> = {
+  pending: '待审核',
+  processing: '待沟通',
+  resolved: '已解决',
+  rejected: '无需处理',
+};
+
+export const rectificationStatusMap: Record<RectificationStatus, string> = {
+  pending: '待确认',
+  confirmed: '已确认',
+  completed: '已完成',
+};
+
 export type ConsumptionCategory = 'food' | 'souvenir' | 'photography' | 'parking' | 'other';
 
 export type IssueKeyword = 'price_high' | 'queue_long' | 'attitude_bad' | 'forced_consumption' | 'hygiene' | 'quality' | 'other';

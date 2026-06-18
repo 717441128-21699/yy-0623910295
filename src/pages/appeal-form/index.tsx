@@ -3,10 +3,13 @@ import { View, Text, Textarea, Image } from '@tarojs/components';
 import Taro, { useRouter, useDidShow } from '@tarojs/taro';
 import styles from './index.module.scss';
 import { mockReviews } from '@/data/mock';
+import { useAppStore } from '@/store/useAppStore';
+import type { Appeal } from '@/types';
 
 const AppealFormPage: React.FC = () => {
   const router = useRouter();
   const reviewId = router.params.reviewId || 'r002';
+  const { addAppeal } = useAppStore();
 
   const review = useMemo(() => {
     return mockReviews.find((r) => r.id === reviewId);
@@ -60,6 +63,14 @@ const AppealFormPage: React.FC = () => {
       return;
     }
 
+    if (evidenceImages.length === 0) {
+      Taro.showToast({
+        title: '请至少上传一张现场照片',
+        icon: 'none',
+      });
+      return;
+    }
+
     setSubmitting(true);
     console.log('[AppealFormPage] 提交申诉:', {
       reviewId,
@@ -68,8 +79,23 @@ const AppealFormPage: React.FC = () => {
       receiptImage,
     });
 
+    const newAppeal: Appeal = {
+      id: `appeal_${Date.now()}`,
+      reviewId: reviewId,
+      reviewContent: review?.content || '',
+      storeName: review?.storeName || '古镇风味餐厅',
+      status: 'pending',
+      statusText: '待审核',
+      description: description,
+      evidenceImages: evidenceImages,
+      receiptImage: receiptImage || undefined,
+      createdAt: new Date().toLocaleString(),
+    };
+
     setTimeout(() => {
       setSubmitting(false);
+      addAppeal(newAppeal);
+      console.log('[AppealFormPage] 申诉已添加到全局状态:', newAppeal.id);
       Taro.showToast({
         title: '申诉提交成功',
         icon: 'success',

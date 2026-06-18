@@ -4,8 +4,7 @@ import Taro, { useDidShow } from '@tarojs/taro';
 import styles from './index.module.scss';
 import RectificationCard from '@/components/RectificationCard';
 import FilterTabs from '@/components/FilterTabs';
-import type { Rectification, RectificationStatus } from '@/types';
-import { mockRectifications } from '@/data/mock';
+import { useAppStore } from '@/store/useAppStore';
 
 const statusOptions = [
   { label: '全部', value: 'all' },
@@ -16,11 +15,11 @@ const statusOptions = [
 
 const RectificationsPage: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [rectifications, setRectifications] = useState<Rectification[]>(mockRectifications);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const { rectifications, updateRectificationStatus } = useAppStore();
 
   useDidShow(() => {
-    console.log('[RectificationsPage] 页面显示');
+    console.log('[RectificationsPage] 页面显示，整改数量:', rectifications.length);
   });
 
   const filteredRectifications = useMemo(() => {
@@ -64,13 +63,7 @@ const RectificationsPage: React.FC = () => {
 
   const handleConfirm = (id: string) => {
     console.log('[RectificationsPage] 确认整改:', id);
-    setRectifications((prev) =>
-      prev.map((r) =>
-        r.id === id
-          ? { ...r, status: 'confirmed' as RectificationStatus, statusText: '已确认', confirmedAt: new Date().toLocaleString() }
-          : r
-      )
-    );
+    updateRectificationStatus(id, 'confirmed');
     Taro.showToast({
       title: '已确认整改',
       icon: 'success',

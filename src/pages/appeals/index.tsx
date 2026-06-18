@@ -4,38 +4,40 @@ import Taro, { useDidShow } from '@tarojs/taro';
 import styles from './index.module.scss';
 import AppealCard from '@/components/AppealCard';
 import FilterTabs from '@/components/FilterTabs';
-import { mockAppeals } from '@/data/mock';
+import { useAppStore } from '@/store/useAppStore';
 
 const statusOptions = [
   { label: '全部', value: 'all' },
   { label: '待审核', value: 'pending' },
-  { label: '处理中', value: 'processing' },
+  { label: '待沟通', value: 'processing' },
   { label: '已解决', value: 'resolved' },
-  { label: '已驳回', value: 'rejected' },
+  { label: '无需处理', value: 'rejected' },
 ];
 
 const AppealsPage: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const { appeals } = useAppStore();
 
   useDidShow(() => {
-    console.log('[AppealsPage] 页面显示');
+    console.log('[AppealsPage] 页面显示，申诉数量:', appeals.length);
   });
 
   const filteredAppeals = useMemo(() => {
     if (statusFilter === 'all') {
-      return mockAppeals;
+      return appeals;
     }
-    return mockAppeals.filter((appeal) => appeal.status === statusFilter);
-  }, [statusFilter]);
+    return appeals.filter((appeal) => appeal.status === statusFilter);
+  }, [statusFilter, appeals]);
 
   const stats = useMemo(() => {
-    const total = mockAppeals.length;
-    const pending = mockAppeals.filter((a) => a.status === 'pending').length;
-    const processing = mockAppeals.filter((a) => a.status === 'processing').length;
-    const resolved = mockAppeals.filter((a) => a.status === 'resolved').length;
-    return { total, pending, processing, resolved };
-  }, []);
+    const total = appeals.length;
+    const pending = appeals.filter((a) => a.status === 'pending').length;
+    const processing = appeals.filter((a) => a.status === 'processing').length;
+    const resolved = appeals.filter((a) => a.status === 'resolved').length;
+    const rejected = appeals.filter((a) => a.status === 'rejected').length;
+    return { total, pending, processing, resolved, rejected };
+  }, [appeals]);
 
   const handleRefresh = () => {
     setIsRefreshing(true);
@@ -89,7 +91,11 @@ const AppealsPage: React.FC = () => {
           </View>
           <View className={styles.statsItem}>
             <Text className={styles.statsValue} style={{ color: '#165dff' }}>{stats.processing}</Text>
-            <Text className={styles.statsLabel}>处理中</Text>
+            <Text className={styles.statsLabel}>待沟通</Text>
+          </View>
+          <View className={styles.statsItem}>
+            <Text className={styles.statsValue} style={{ color: '#86909c' }}>{stats.rejected}</Text>
+            <Text className={styles.statsLabel}>无需处理</Text>
           </View>
           <View className={styles.statsItem}>
             <Text className={styles.statsValue} style={{ color: '#00b42a' }}>{stats.resolved}</Text>

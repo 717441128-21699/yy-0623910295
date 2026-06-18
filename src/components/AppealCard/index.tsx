@@ -11,9 +11,9 @@ interface AppealCardProps {
 
 const statusMap: Record<AppealStatus, { label: string; className: string }> = {
   pending: { label: '待审核', className: styles.statusPending },
-  processing: { label: '处理中', className: styles.statusProcessing },
+  processing: { label: '待沟通', className: styles.statusProcessing },
   resolved: { label: '已解决', className: styles.statusResolved },
-  rejected: { label: '已驳回', className: styles.statusRejected },
+  rejected: { label: '无需处理', className: styles.statusRejected },
 };
 
 const AppealCard: React.FC<AppealCardProps> = ({ appeal, onClick }) => {

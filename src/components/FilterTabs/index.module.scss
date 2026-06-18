@@ -13,7 +13,6 @@
 }
 
 .tabItem {
-  @include scroll-x-item(auto);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -24,6 +23,7 @@
   border: 1rpx solid $color-border;
   transition: all $transition-fast;
   white-space: nowrap;
+  vertical-align: top;
 
   &:active {
     opacity: 0.9;
