@@ -1,13 +1,12 @@
 export type EmotionType = 'positive' | 'neutral' | 'negative';
 
-export type AppealStatus = 'pending' | 'processing' | 'resolved' | 'rejected';
+export type AppealStatus = 'pending' | 'processing' | 'rejected';
 
 export type RectificationStatus = 'pending' | 'confirmed' | 'completed';
 
 export const appealStatusMap: Record<AppealStatus, string> = {
   pending: '待审核',
   processing: '待沟通',
-  resolved: '已解决',
   rejected: '无需处理',
 };
 

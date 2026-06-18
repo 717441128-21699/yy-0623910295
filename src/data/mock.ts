@@ -191,7 +191,7 @@ export const mockAppeals: Appeal[] = [
     reviewContent: '这家餐厅价格太贵了，一盘青菜要48元，而且上菜速度超级慢，等了40分钟才上第一个菜。服务员态度也不好，叫了好几次才理人。',
     storeName: '古镇风味餐厅',
     status: 'processing',
-    statusText: '处理中',
+    statusText: '待沟通',
     description: '青菜48元是我们店的特色有机青菜，当天确实因为游客太多上菜慢了，已经和客人道歉过了。服务员当时在忙其他桌，不是故意不理。',
     evidenceImages: [
       'https://picsum.photos/id/292/300/300',
@@ -201,7 +201,7 @@ export const mockAppeals: Appeal[] = [
     createdAt: '2024-06-18 20:00',
     processedAt: '2024-06-18 21:30',
     processor: '运营部-李主管',
-    processorComment: '已核实，已与商户沟通，了解当天确实是用餐高峰期，建议优化上菜流程。',
+    processorComment: '已核实，需与商户进一步沟通，了解当天用峰期安排情况。',
   },
   {
     id: 'a002',
@@ -222,14 +222,14 @@ export const mockAppeals: Appeal[] = [
     reviewId: 'r004',
     reviewContent: '点了一份特色菜，服务员说没有了让换别的，等了半天又说这个有了，管理混乱。',
     storeName: '古镇风味餐厅',
-    status: 'resolved',
-    statusText: '已解决',
+    status: 'rejected',
+    statusText: '无需处理',
     description: '当时厨房和前台沟通有误会，已经加强内部沟通培训，对给客人带来不好体验深表歉意。',
     evidenceImages: [],
     createdAt: '2024-06-17 13:30',
     processedAt: '2024-06-17 15:00',
     processor: '运营部-王经理',
-    processorComment: '情况属实，已要求商户加强内部管理，完善前后台沟通机制。',
+    processorComment: '经核实，该评价反映情况属实，但属偶发事件，商户已改进，无需进一步处理。',
   },
   {
     id: 'a004',
@@ -237,7 +237,7 @@ export const mockAppeals: Appeal[] = [
     reviewContent: '菜的味道一般，但是卫生有点问题，菜里发现了头发。',
     storeName: '古镇风味餐厅',
     status: 'rejected',
-    statusText: '驳回',
+    statusText: '无需处理',
     description: '不认可这个评价，我们厨房卫生标准很高，有严格的操作规范。',
     evidenceImages: [
       'https://picsum.photos/id/580/300/300',
@@ -245,7 +245,7 @@ export const mockAppeals: Appeal[] = [
     createdAt: '2024-06-15 15:00',
     processedAt: '2024-06-15 16:30',
     processor: '运营部-张主管',
-    processorComment: '经核实，商户提供的卫生检查记录齐全，客人无法提供有效证据，申诉驳回。',
+    processorComment: '经核实，商户提供的卫生检查记录齐全，客人无法提供有效证据，无需处理。',
   },
 ];
 

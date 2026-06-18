@@ -12,7 +12,6 @@ interface AppealCardProps {
 const statusMap: Record<AppealStatus, { label: string; className: string }> = {
   pending: { label: '待审核', className: styles.statusPending },
   processing: { label: '待沟通', className: styles.statusProcessing },
-  resolved: { label: '已解决', className: styles.statusResolved },
   rejected: { label: '无需处理', className: styles.statusRejected },
 };
 

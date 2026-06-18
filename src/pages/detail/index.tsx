@@ -16,7 +16,6 @@ const emotionMap: Record<EmotionType, { label: string; className: string }> = {
 const statusMap: Record<AppealStatus, { label: string; className: string }> = {
   pending: { label: '待审核', className: styles.statusPending },
   processing: { label: '待沟通', className: styles.statusProcessing },
-  resolved: { label: '已解决', className: styles.statusResolved },
   rejected: { label: '无需处理', className: styles.statusRejected },
 };
 
@@ -156,7 +155,7 @@ const DetailPage: React.FC = () => {
             </View>
             <Text className={styles.appealContent}>{appeal.description}</Text>
             {appeal.evidenceImages.length > 0 && (
-              <View className={styles.appealEvidence}>
+              <View style={{ marginTop: 16 }}>
                 <Text className={styles.sectionLabel}>现场照片：</Text>
                 <View className={styles.appealEvidence}>
                   {appeal.evidenceImages.map((img, index) => (

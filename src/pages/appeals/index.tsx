@@ -10,7 +10,6 @@ const statusOptions = [
   { label: '全部', value: 'all' },
   { label: '待审核', value: 'pending' },
   { label: '待沟通', value: 'processing' },
-  { label: '已解决', value: 'resolved' },
   { label: '无需处理', value: 'rejected' },
 ];
 
@@ -34,9 +33,8 @@ const AppealsPage: React.FC = () => {
     const total = appeals.length;
     const pending = appeals.filter((a) => a.status === 'pending').length;
     const processing = appeals.filter((a) => a.status === 'processing').length;
-    const resolved = appeals.filter((a) => a.status === 'resolved').length;
     const rejected = appeals.filter((a) => a.status === 'rejected').length;
-    return { total, pending, processing, resolved, rejected };
+    return { total, pending, processing, rejected };
   }, [appeals]);
 
   const handleRefresh = () => {
@@ -84,10 +82,6 @@ const AppealsPage: React.FC = () => {
           <View className={styles.statsItem}>
             <Text className={styles.statsValue} style={{ color: '#86909c' }}>{stats.rejected}</Text>
             <Text className={styles.statsLabel}>无需处理</Text>
-          </View>
-          <View className={styles.statsItem}>
-            <Text className={styles.statsValue} style={{ color: '#00b42a' }}>{stats.resolved}</Text>
-            <Text className={styles.statsLabel}>已解决</Text>
           </View>
         </View>
       </View>
