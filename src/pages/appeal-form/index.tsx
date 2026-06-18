@@ -94,16 +94,16 @@ const AppealFormPage: React.FC = () => {
 
     setTimeout(() => {
       setSubmitting(false);
-      addAppeal(newAppeal);
+      addAppeal(newAppeal, reviewId);
       console.log('[AppealFormPage] 申诉已添加到全局状态:', newAppeal.id);
       Taro.showToast({
         title: '申诉提交成功',
         icon: 'success',
-        duration: 2000,
+        duration: 1500,
       });
       setTimeout(() => {
         Taro.navigateBack();
-      }, 2000);
+      }, 1500);
     }, 1500);
   };
 
@@ -195,11 +195,7 @@ const AppealFormPage: React.FC = () => {
         <View className={styles.btnCancel} onClick={handleCancel}>
           <Text className={styles.btnCancelText}>取消</Text>
         </View>
-        <View
-          className={styles.btnSubmit}
-          onClick={handleSubmit}
-          disabled={submitting}
-        >
+        <View className={styles.btnSubmit} onClick={handleSubmit}>
           <Text className={styles.btnSubmitText}>
             {submitting ? '提交中...' : '提交申诉'}
           </Text>

@@ -20,10 +20,12 @@ const AppealCard: React.FC<AppealCardProps> = ({ appeal, onClick }) => {
   const [expanded, setExpanded] = useState(false);
   const statusInfo = statusMap[appeal.status];
 
-  const toggleExpand = (e) => {
+  const toggleExpand = (e: React.MouseEvent) => {
     e.stopPropagation();
     setExpanded(!expanded);
   };
+
+  const hasImages = appeal.evidenceImages.length > 0 || appeal.receiptImage;
 
   return (
     <View className={styles.card} onClick={onClick}>
@@ -52,19 +54,35 @@ const AppealCard: React.FC<AppealCardProps> = ({ appeal, onClick }) => {
         <Text className={styles.appealText}>{appeal.description}</Text>
       </View>
 
-      {appeal.evidenceImages.length > 0 && (
+      {expanded && hasImages && (
         <View className={styles.evidenceSection}>
-          <Text className={styles.evidenceLabel}>凭证照片：</Text>
-          <View className={styles.evidenceImages}>
-            {appeal.evidenceImages.map((img, index) => (
-              <Image
-                key={index}
-                src={img}
-                className={styles.evidenceImage}
-                mode="aspectFill"
-              />
-            ))}
-          </View>
+          {appeal.evidenceImages.length > 0 && (
+            <View className={styles.evidenceGroup}>
+              <Text className={styles.evidenceLabel}>现场照片：</Text>
+              <View className={styles.evidenceImages}>
+                {appeal.evidenceImages.map((img, index) => (
+                  <Image
+                    key={index}
+                    src={img}
+                    className={styles.evidenceImage}
+                    mode="aspectFill"
+                  />
+                ))}
+              </View>
+            </View>
+          )}
+          {appeal.receiptImage && (
+            <View className={styles.evidenceGroup}>
+              <Text className={styles.evidenceLabel}>消费小票：</Text>
+              <View className={styles.evidenceImages}>
+                <Image
+                  src={appeal.receiptImage}
+                  className={styles.evidenceImage}
+                  mode="aspectFill"
+                />
+              </View>
+            </View>
+          )}
         </View>
       )}
 

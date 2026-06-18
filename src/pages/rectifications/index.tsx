@@ -14,7 +14,7 @@ const statusOptions = [
 ];
 
 const RectificationsPage: React.FC = () => {
-  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [statusFilter, setStatusFilter] = useState('all');
   const [isRefreshing, setIsRefreshing] = useState(false);
   const { rectifications, updateRectificationStatus } = useAppStore();
 
@@ -28,7 +28,7 @@ const RectificationsPage: React.FC = () => {
       result = result.filter((r) => r.status === statusFilter);
     }
     return result.sort((a, b) => {
-      const priority = { pending: 0, confirmed: 1, completed: 2 };
+      const priority: Record<string, number> = { pending: 0, confirmed: 1, completed: 2 };
       return priority[a.status] - priority[b.status];
     });
   }, [statusFilter, rectifications]);
@@ -46,20 +46,8 @@ const RectificationsPage: React.FC = () => {
     console.log('[RectificationsPage] 下拉刷新');
     setTimeout(() => {
       setIsRefreshing(false);
-      Taro.stopPullDownRefresh();
     }, 1000);
   };
-
-  const handlePullDownRefresh = () => {
-    handleRefresh();
-  };
-
-  React.useEffect(() => {
-    Taro.onPullDownRefresh(handlePullDownRefresh);
-    return () => {
-      Taro.offPullDownRefresh(handlePullDownRefresh);
-    };
-  }, []);
 
   const handleConfirm = (id: string) => {
     console.log('[RectificationsPage] 确认整改:', id);

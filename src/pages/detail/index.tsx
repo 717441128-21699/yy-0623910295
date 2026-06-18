@@ -23,19 +23,23 @@ const statusMap: Record<AppealStatus, { label: string; className: string }> = {
 const DetailPage: React.FC = () => {
   const router = useRouter();
   const reviewId = router.params.id || 'r001';
-  const { appeals } = useAppStore();
+  const { appeals, appealedReviewIds } = useAppStore();
 
   const review = useMemo<Review | undefined>(() => {
-    return mockReviews.find((r) => r.id === reviewId);
-  }, [reviewId]);
+    const found = mockReviews.find((r) => r.id === reviewId);
+    if (found) {
+      return { ...found, hasAppealed: found.hasAppealed || appealedReviewIds.includes(found.id) };
+    }
+    return undefined;
+  }, [reviewId, appealedReviewIds]);
 
   const appeal = useMemo(() => {
     if (!review?.hasAppealed) return null;
-    return appeals.find((a) => a.id === review.appealId) || appeals.find((a) => a.reviewId === reviewId);
-  }, [review, appeals]);
+    return appeals.find((a) => a.reviewId === reviewId) || appeals.find((a) => a.id === review?.appealId);
+  }, [review, appeals, reviewId]);
 
   useDidShow(() => {
-    console.log('[DetailPage] 页面显示，评价ID:', reviewId);
+    console.log('[DetailPage] 页面显示，评价ID:', reviewId, '已申诉:', review?.hasAppealed);
   });
 
   const renderStars = (rating: number) => {
@@ -57,7 +61,7 @@ const DetailPage: React.FC = () => {
     if (!review) return;
     if (review.hasAppealed) {
       Taro.showToast({
-        title: '已提交申诉',
+        title: '已提交申诉，请等待审核',
         icon: 'none',
       });
       return;
@@ -153,14 +157,29 @@ const DetailPage: React.FC = () => {
             <Text className={styles.appealContent}>{appeal.description}</Text>
             {appeal.evidenceImages.length > 0 && (
               <View className={styles.appealEvidence}>
-                {appeal.evidenceImages.map((img, index) => (
+                <Text className={styles.sectionLabel}>现场照片：</Text>
+                <View className={styles.appealEvidence}>
+                  {appeal.evidenceImages.map((img, index) => (
+                    <Image
+                      key={index}
+                      src={img}
+                      className={styles.evidenceImage}
+                      mode="aspectFill"
+                    />
+                  ))}
+                </View>
+              </View>
+            )}
+            {appeal.receiptImage && (
+              <View style={{ marginTop: 16 }}>
+                <Text className={styles.sectionLabel}>消费小票：</Text>
+                <View className={styles.appealEvidence}>
                   <Image
-                    key={index}
-                    src={img}
+                    src={appeal.receiptImage}
                     className={styles.evidenceImage}
                     mode="aspectFill"
                   />
-                ))}
+                </View>
               </View>
             )}
             {appeal.processor && (
@@ -185,7 +204,7 @@ const DetailPage: React.FC = () => {
           <Text className={styles.btnSecondaryText}>联系运营</Text>
         </View>
         <View
-          className={styles.btnPrimary}
+          className={classnames(styles.btnPrimary, review.hasAppealed && styles.btnPrimaryDisabled)}
           onClick={handleAppeal}
         >
           <Text className={styles.btnPrimaryText}>

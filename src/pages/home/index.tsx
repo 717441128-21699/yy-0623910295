@@ -4,7 +4,7 @@ import Taro, { useDidShow } from '@tarojs/taro';
 import styles from './index.module.scss';
 import ReviewCard from '@/components/ReviewCard';
 import FilterTabs from '@/components/FilterTabs';
-import type { Review, IssueKeyword } from '@/types';
+import type { IssueKeyword } from '@/types';
 import {
   mockStoreOverview,
   mockReviews,
@@ -19,12 +19,12 @@ import { useAppStore } from '@/store/useAppStore';
 type FilterType = 'source' | 'emotion' | 'keyword';
 
 const HomePage: React.FC = () => {
-  const [sourceFilter, setSourceFilter] = useState<string>('all');
-  const [emotionFilter, setEmotionFilter] = useState<string>('all');
-  const [keywordFilter, setKeywordFilter] = useState<string>('all');
+  const [sourceFilter, setSourceFilter] = useState('all');
+  const [emotionFilter, setEmotionFilter] = useState('all');
+  const [keywordFilter, setKeywordFilter] = useState('all');
   const [activeFilterType, setActiveFilterType] = useState<FilterType>('source');
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const { appeals, rectifications } = useAppStore();
+  const { appeals, rectifications, appealedReviewIds } = useAppStore();
 
   const pendingAppealsCount = useMemo(() => {
     return appeals.filter((a) => a.status === 'pending').length;
@@ -53,10 +53,10 @@ const HomePage: React.FC = () => {
     });
   }, [sourceFilter, emotionFilter, keywordFilter]);
 
-  const handleReviewClick = (review: Review) => {
-    console.log('[HomePage] 点击评价:', review.id);
+  const handleReviewClick = (reviewId: string) => {
+    console.log('[HomePage] 点击评价:', reviewId);
     Taro.navigateTo({
-      url: `/pages/detail/index?id=${review.id}`,
+      url: `/pages/detail/index?id=${reviewId}`,
     });
   };
 
@@ -65,37 +65,27 @@ const HomePage: React.FC = () => {
     console.log('[HomePage] 下拉刷新');
     setTimeout(() => {
       setIsRefreshing(false);
-      Taro.stopPullDownRefresh();
     }, 1000);
   };
 
-  const handlePullDownRefresh = () => {
-    handleRefresh();
-  };
-
-  React.useEffect(() => {
-    Taro.onPullDownRefresh(handlePullDownRefresh);
-    return () => {
-      Taro.offPullDownRefresh(handlePullDownRefresh);
-    };
-  }, []);
-
   const { totalReviews, positiveCount, neutralCount, negativeCount } = mockStoreOverview;
-  const positivePercent = Math.round((positiveCount / totalReviews) * 100;
+  const positivePercent = Math.round((positiveCount / totalReviews) * 100);
   const neutralPercent = Math.round((neutralCount / totalReviews) * 100);
   const negativePercent = 100 - positivePercent - neutralPercent;
 
-  const currentOptions = {
-    source: sourceOptions,
-    emotion: emotionOptions,
-    keyword: keywordOptions,
-  }[activeFilterType];
+  const currentOptions =
+    activeFilterType === 'source'
+      ? sourceOptions
+      : activeFilterType === 'emotion'
+      ? emotionOptions
+      : keywordOptions;
 
-  const currentValue = {
-    source: sourceFilter,
-    emotion: emotionFilter,
-    keyword: keywordFilter,
-  }[activeFilterType];
+  const currentValue =
+    activeFilterType === 'source'
+      ? sourceFilter
+      : activeFilterType === 'emotion'
+      ? emotionFilter
+      : keywordFilter;
 
   const handleFilterChange = (value: string) => {
     if (activeFilterType === 'source') {
@@ -203,17 +193,15 @@ const HomePage: React.FC = () => {
 
       <View className={styles.filterSection}>
         <View className={styles.filterTitle}>筛选维度</View>
-        <View style={{ marginBottom: 16 }}>
-          <FilterTabs
-            options={[
-              { label: '差评来源', value: 'source' },
-              { label: '情绪类型', value: 'emotion' },
-              { label: '问题关键词', value: 'keyword' },
-            ]}
-            activeValue={activeFilterType}
-            onChange={(value) => setActiveFilterType(value as FilterType)}
-          />
-        </View>
+        <FilterTabs
+          options={[
+            { label: '差评来源', value: 'source' },
+            { label: '情绪类型', value: 'emotion' },
+            { label: '问题关键词', value: 'keyword' },
+          ]}
+          activeValue={activeFilterType}
+          onChange={(value) => setActiveFilterType(value as FilterType)}
+        />
         <FilterTabs
           options={currentOptions}
           activeValue={currentValue}
@@ -248,13 +236,16 @@ const HomePage: React.FC = () => {
 
       <View className={styles.reviewsList}>
         {filteredReviews.length > 0 ? (
-          filteredReviews.map((review) => (
-            <ReviewCard
-              key={review.id}
-              review={review}
-              onClick={() => handleReviewClick(review)}
-            />
-          ))
+          filteredReviews.map((review) => {
+            const hasAppealed = review.hasAppealed || appealedReviewIds.includes(review.id);
+            return (
+              <ReviewCard
+                key={review.id}
+                review={{ ...review, hasAppealed }}
+                onClick={() => handleReviewClick(review.id)}
+              />
+            );
+          })
         ) : (
           <View className={styles.emptyState}>暂无符合条件的评价</View>
         )}

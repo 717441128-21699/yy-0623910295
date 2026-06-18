@@ -294,3 +294,8 @@
 .btnPrimary:disabled {
   opacity: 0.5;
 }
+
+.btnPrimaryDisabled {
+  background: $color-border !important;
+  opacity: 0.8;
+}

@@ -23,12 +23,12 @@ const RectificationCard: React.FC<RectificationCardProps> = ({ rectification, on
 
   const isUrgent = rectification.status === 'pending';
 
-  const toggleExpand = (e) => {
+  const toggleExpand = (e: React.MouseEvent) => {
     e.stopPropagation();
     setExpanded(!expanded);
   };
 
-  const handleConfirm = (e) => {
+  const handleConfirm = (e: React.MouseEvent) => {
     e.stopPropagation();
     Taro.showModal({
       title: '确认整改',

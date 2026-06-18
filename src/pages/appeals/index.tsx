@@ -15,7 +15,7 @@ const statusOptions = [
 ];
 
 const AppealsPage: React.FC = () => {
-  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [statusFilter, setStatusFilter] = useState('all');
   const [isRefreshing, setIsRefreshing] = useState(false);
   const { appeals } = useAppStore();
 
@@ -44,20 +44,8 @@ const AppealsPage: React.FC = () => {
     console.log('[AppealsPage] 下拉刷新');
     setTimeout(() => {
       setIsRefreshing(false);
-      Taro.stopPullDownRefresh();
     }, 1000);
   };
-
-  const handlePullDownRefresh = () => {
-    handleRefresh();
-  };
-
-  React.useEffect(() => {
-    Taro.onPullDownRefresh(handlePullDownRefresh);
-    return () => {
-      Taro.offPullDownRefresh(handlePullDownRefresh);
-    };
-  }, []);
 
   const handleCreateAppeal = () => {
     console.log('[AppealsPage] 新建申诉');
